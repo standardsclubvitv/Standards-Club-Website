@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIS Standards Club - VIT Vellore</title>
+    <title>StandardsVITv</title>
+    <link rel="icon" type="image/png" href="/logo_club(1).png">
     <link rel="stylesheet" href="./style1.css">
     <link rel="stylesheet" href="./style2.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -124,7 +125,7 @@
                 <!-- Vice President -->
                 <div class="member-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="member-image">
-                        <img src="./Giridhar R.jpg" alt="Vice President">
+                        <img src="./Giridhar R.JPG" alt="Vice President">
                     </div>
                     <div class="member-info">
                         <h3>Giridhar R</h3>
@@ -564,15 +565,83 @@
             });
 
             const result = await response.json();
-            formStatus.innerText = result.message;
-            formStatus.style.color = response.ok ? 'green' : 'red';
+
+            if (result.status === 'success') {
+                formStatus.innerText = result.message;
+                formStatus.style.color = 'green';
+                document.getElementById('contactForm').reset();
+
+                // Show popup
+                showPopup('✅ Message sent successfully!');
+            } else {
+                formStatus.innerText = result.message || 'Failed to send message.';
+                formStatus.style.color = 'red';
+            }
         } catch (err) {
             console.error('Fetch error:', err);
             formStatus.innerText = 'Error sending message.';
             formStatus.style.color = 'red';
         }
     });
+
+    function showPopup(message) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerText = message;
+        document.body.appendChild(popup);
+
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }, 3000); // Visible for 3 seconds
+    }
 </script>
+
+<style>
+    .popup {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4caf50;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        z-index: 9999;
+    }
+
+    .popup.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<style>
+    .form-status {
+        margin-top: 10px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .form-status.info {
+        color: #555;
+    }
+
+    .form-status.success {
+        color: green;
+    }
+
+    .form-status.error {
+        color: red;
+    }
+</style>
 
 
 
