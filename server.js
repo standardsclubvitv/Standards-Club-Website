@@ -15,41 +15,47 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 
 // Route to serve the HTML file
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Email sending endpoint
-app.post('/send-email', async (req, res) => {
-  const { name, email, subject, message } = req.body;
+app.post('/api/send-email', async (req, res) => {
+    const { name, email, subject, message } = req.body;
 
-  console.log(`📨 Processing message from ${name} <${email}>...`);
+    console.log(`📨 Processing message from ${name} <${email}>...`);
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
 
-  const mailOptions = {
-    from: email,
-    to: process.env.EMAIL_TO,
-    subject: subject,
-    text: `New message from ${name} <${email}>:\n\n${message}`,
-  };
+    const mailOptions = {
+        from: email,
+        to: process.env.EMAIL_TO,
+        subject: subject,
+        text: `New message from ${name} <${email}>:\n\n${message}`,
+    };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent successfully!');
-    res.status(200).json({ message: 'Message sent successfully!' });
-  } catch (error) {
-    console.error('❌ Failed to send email:', error);
-    res.status(500).json({ message: 'Failed to send message.' });
-  }
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('✅ Email sent successfully!');
+        res.status(200).json({
+            message: 'Message sent successfully!',
+            status: 'success'
+        });
+    } catch (error) {
+        console.error('❌ Failed to send email:', error);
+        res.status(500).json({
+            message: 'Failed to send message.',
+            status: 'error'
+        });
+    }
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running at http://localhost:${PORT}`);
+    console.log(`🚀 Server is running at http://localhost:${PORT}`);
 });
