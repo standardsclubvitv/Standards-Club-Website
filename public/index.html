@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StandardsVITv</title>
     <link rel="icon" type="image/png" href="./logo_club (1).png">
     <link rel="stylesheet" href="./style1.css">
@@ -745,4 +745,14 @@
             }, 100); // Small delay to ensure DOM is ready
         });
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    document.body.style.width = '100%';
+    document.querySelector('.navbar').style.width = '100%';
+    window.dispatchEvent(new Event('resize'));
+  }, 100);
+});
 </script>
